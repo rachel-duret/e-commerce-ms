@@ -1,6 +1,6 @@
 package com.rd.ecommerce.dto;
 
-import com.rd.ecommerce.customer.Address;
+import com.rd.ecommerce.models.Address;
 
 public record CustomerResponse(
         String id,

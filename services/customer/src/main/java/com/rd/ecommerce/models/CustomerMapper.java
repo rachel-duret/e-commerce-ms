@@ -1,4 +1,4 @@
-package com.rd.ecommerce.customer;
+package com.rd.ecommerce.models;
 
 
 import com.rd.ecommerce.dto.CustomerRequest;
