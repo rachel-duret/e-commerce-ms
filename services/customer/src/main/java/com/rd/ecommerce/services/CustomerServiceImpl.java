@@ -5,7 +5,6 @@ import com.rd.ecommerce.dto.CustomerRequest;
 import com.rd.ecommerce.dto.CustomerResponse;
 import com.rd.ecommerce.exceptions.CustomerNotFoundException;
 import com.rd.ecommerce.models.Customer;
-import com.rd.ecommerce.models.CustomerMapper;
 import com.rd.ecommerce.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;

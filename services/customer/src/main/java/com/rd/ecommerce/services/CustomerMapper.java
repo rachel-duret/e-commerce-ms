@@ -1,8 +1,9 @@
-package com.rd.ecommerce.models;
+package com.rd.ecommerce.services;
 
 
 import com.rd.ecommerce.dto.CustomerRequest;
 import com.rd.ecommerce.dto.CustomerResponse;
+import com.rd.ecommerce.models.Customer;
 import org.springframework.stereotype.Service;
 
 @Service
