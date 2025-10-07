@@ -1,0 +1,17 @@
+package com.rd.ecommerce.dto;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rd.ecommerce.models.PaymentMethod;
+
+import java.math.BigDecimal;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public record OrderResponse(
+        Integer id,
+        String reference,
+        BigDecimal amount,
+        PaymentMethod paymentMethod,
+        String customerId
+) {
+}
