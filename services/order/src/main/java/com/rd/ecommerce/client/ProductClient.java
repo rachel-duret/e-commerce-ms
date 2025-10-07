@@ -11,6 +11,7 @@ import java.util.List;
 
 
 // When interacting with downstream services or external APIs that we don't control, Better to use RestTemplate web client.
+// TODO to check name of the service
 @FeignClient(
         name = "product-service",
         url = "${application.config.productUrl}"

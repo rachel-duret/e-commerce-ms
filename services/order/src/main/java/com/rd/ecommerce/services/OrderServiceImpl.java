@@ -3,6 +3,7 @@ package com.rd.ecommerce.services;
 
 import com.rd.ecommerce.Repositories.OrderRepository;
 import com.rd.ecommerce.client.CustomerClient;
+import com.rd.ecommerce.client.PaymentClient;
 import com.rd.ecommerce.client.ProductClient;
 import com.rd.ecommerce.dto.*;
 import com.rd.ecommerce.exceptions.BusinessException;
@@ -21,6 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     @Override
     public Integer createOrder(OrderRequest orderRequest) {
@@ -39,7 +41,16 @@ public class OrderServiceImpl implements OrderService {
                     null, order.getId(), purchaseRequest.productId(), purchaseRequest.quantity()
             ));
         }
-//        start the payment process --> payment-service TODO
+//        start the payment process --> payment-service
+        var paymentRequest = new PaymentRequest(
+                orderRequest.amount(),
+                orderRequest.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
+
 //        send the order confirmation --> notification-service (kafka)
         orderProducer.sendOrderConfirmation(
                 new OrderConfirmation(
