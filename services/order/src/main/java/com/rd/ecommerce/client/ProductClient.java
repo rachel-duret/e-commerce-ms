@@ -4,7 +4,8 @@ package com.rd.ecommerce.client;
 import com.rd.ecommerce.dto.PurchaseRequest;
 import com.rd.ecommerce.dto.PurchaseResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -14,7 +15,8 @@ import java.util.List;
         name = "product-service",
         url = "${application.config.productUrl}"
 )
-public class ProductClient {
-    @GetMapping("/purchase")
-    List<PurchaseResponse> purchaseProducts(List<ProductPurchaseRequest>)
+public interface ProductClient {
+    @PostMapping("/purchase")
+    List<PurchaseResponse> purchaseProducts(@RequestBody List<PurchaseRequest> requests);
+
 }
