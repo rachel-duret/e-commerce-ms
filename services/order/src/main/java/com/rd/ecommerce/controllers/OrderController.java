@@ -18,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
+    public ResponseEntity<Integer> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
         return ResponseEntity.ok(orderService.createOrder(orderRequest));
     }
 
@@ -29,6 +29,6 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer orderId) {
-        return ResponseEntity.ok(orderService.findOrderById());
+        return ResponseEntity.ok(orderService.findOrderById(orderId));
     }
 }

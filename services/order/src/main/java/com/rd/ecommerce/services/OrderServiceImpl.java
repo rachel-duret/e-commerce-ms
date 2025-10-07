@@ -4,11 +4,9 @@ package com.rd.ecommerce.services;
 import com.rd.ecommerce.Repositories.OrderRepository;
 import com.rd.ecommerce.client.CustomerClient;
 import com.rd.ecommerce.client.ProductClient;
-import com.rd.ecommerce.dto.OrderLineRequest;
-import com.rd.ecommerce.dto.OrderRequest;
-import com.rd.ecommerce.dto.OrderResponse;
-import com.rd.ecommerce.dto.PurchaseRequest;
+import com.rd.ecommerce.dto.*;
 import com.rd.ecommerce.exceptions.BusinessException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +20,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
+    private final OrderProducer orderProducer;
 
     @Override
-    public String createOrder(OrderRequest orderRequest) {
+    public Integer createOrder(OrderRequest orderRequest) {
 //        checks if the order exists
 //        checks if the customer exists -- OpenFeign
         var customer = customerClient
@@ -41,17 +40,32 @@ public class OrderServiceImpl implements OrderService {
             ));
         }
 //        start the payment process --> payment-service TODO
-//        send the order confirmation --> notification-service (kafka) TODO
-        return "";
+//        send the order confirmation --> notification-service (kafka)
+        orderProducer.sendOrderConfirmation(
+                new OrderConfirmation(
+                        orderRequest.reference(),
+                        orderRequest.amount(),
+                        orderRequest.paymentMethod(),
+                        customer,
+                        purchasedProducts
+                )
+        );
+        return order.getId();
     }
 
     @Override
     public List<OrderResponse> findAllOrders() {
-        return List.of();
+        return orderRepository.findAll()
+                .stream()
+                .map(orderMapper::toOrderResponse)
+                .toList();
     }
 
     @Override
-    public OrderResponse findOrderById() {
-        return null;
+    public OrderResponse findOrderById(Integer orderId) {
+        return orderRepository.findById(orderId)
+                .map(orderMapper::toOrderResponse)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("No order found with provided ID:: %s", orderId)));
+
     }
 }
